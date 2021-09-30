@@ -19,21 +19,21 @@ para executar é necessário um arquivo de configuração que está disponivel n
 é necessário instalar o firebase para isso, digite em seu powershell: 
 
 ```shell 
-    npm install firebase-admin --save
+npm install firebase-admin --save
 ```
 
 **Para gerar um arquivo de chave privada da conta de serviço, siga estas etapas:**
 
-1. No Console do Firebase, abra Configurações > Contas de serviço.
+1. No Console do Firebase, abra **Configurações** > <a href="https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk"> Contas de serviço.</a>
 
-2. Clique em Gerar nova chave privada e selecione Gerar chave para confirmar.
+2. Clique em **Gerar nova chave privada** e selecione **Gerar chave** para confirmar.
 
 3. Armazene com segurança o arquivo JSON que contém a chave.
 
 e depois configure uma variável em seu powershell:
 
 ```shell
-    $env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\username\Downloads\service-account-file.json"
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\username\Downloads\service-account-file.json"
  ```    
 
 para linux ou macOS: 
