@@ -16,10 +16,10 @@ Ele passa informações sobre dias e horários disponiveis, e também consegue m
 
 para executar é necessário um arquivo de configuração que está disponivel nas configurações do firebase. 
 
-é necessário instalar o firebase para isso, digite em seu powershell: 
+é necessário instalar as bibliotecas externas para isso, digite em seu powershell: 
 
 ```shell 
-npm install firebase-admin --save
+npm install --save
 ```
 
 **Para gerar um arquivo de chave privada da conta de serviço, siga estas etapas:**
