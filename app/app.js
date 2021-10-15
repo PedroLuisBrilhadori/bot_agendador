@@ -44,7 +44,6 @@ app.post("/", express.json(), (req, res) => {
               "Olá " + respostaObject.nome + " encontrei seu cadastro." + "\n";
           }
         } catch {
-          // resposta = ("Criando cadastro!" + "\n");
           cadastrar(nome, telefone);
         }
         proxMensagem = agent.consoleMessages[0].text;
@@ -57,7 +56,7 @@ app.post("/", express.json(), (req, res) => {
   }
 
   async function marcarHorario(agent) {
-    const telefone = agent.contexts[0].parameters.telefone;
+    let telefone = agent.contexts[0].parameters.telefone;
     const link = `https://sheetdb.io/api/v1/at4lvf6xtu4tt/search?telefone=${telefone}`;
     const sheets = `https://sheetdb.io/api/v1/at4lvf6xtu4tt/telefone/${telefone}`;
     let hora = new Date(`${agent.parameters.hora}`);
@@ -74,16 +73,20 @@ app.post("/", express.json(), (req, res) => {
     let resposta = "";
     const horarioAgendado = `Data: ${data} às: ${hora} horas`;
 
-    axios.get(link).then((res) => {
+    return axios.get(link).then((res) => {
       const respostaObject = res.data[0];
-      if (respostaObject.agendamento == "") {
-        axios
-          .patch(sheets, {
-            data: { agendamento: horarioAgendado },
-          })    
-        resposta = `Agendamento concluído! para: ${respostaObject.agendamento}`;
-      } else {
-            resposta = `Você possui um agendamento para: ${respostaObject.agendamento}`;
+      try{
+        if (respostaObject.agendamento == "") {
+          axios.patch(sheets, {
+              data: { agendamento: horarioAgendado },
+            })    
+            resposta = `Agendamento concluído! para: ${horarioAgendado}`;
+          }else{
+            resposta = `Você já possui um agendamento para: ${respostaObject.agendamento}`;
+          }
+      }
+      catch {
+        resposta = `erro objeto`;
       }
       agent.add(resposta);
     });
@@ -91,16 +94,16 @@ app.post("/", express.json(), (req, res) => {
   }
 
   async function desmarcarHorario(agent) {
-    const telefone = usuarioAtual.telefone;
+     telefone = agent.contexts[1].parameters.telefone;
     const link = `https://sheetdb.io/api/v1/at4lvf6xtu4tt/search?telefone=${telefone}`;
     let resposta = "";
     return axios.get(link).then((res) => {
       const respostaObject = res.data[0];
 
-      if (respostaObject.consulta == undefined) {
+      if (respostaObject.consulta == "") {
         resposta = `Você não possui consultas agendadas`;
       } else {
-        resposta = `Você deseja deletar sua consulta marcada, para: ${respostaObject.consulta}?`;
+        resposta = `Você deseja deletar sua consulta marcada, para: ${respostaObject.agendamento}?`;
       }
 
       agent.add(resposta);
@@ -108,12 +111,14 @@ app.post("/", express.json(), (req, res) => {
   }
 
   async function confirmaDesmarcarHorario(agent) {
+    const telefone = agent.contexts[1].parameters.telefone;
     const link = `https://sheetdb.io/api/v1/at4lvf6xtu4tt/search?telefone=${telefone}`;
+    const sheets = `https://sheetdb.io/api/v1/at4lvf6xtu4tt/telefone/${telefone}`;
     return axios.get(link).then((res) => {
       const respostaObject = res.data[0];
-      axios.delete(sheets, {
+      axios.patch(sheets, {
         data: {
-          respostaObject,
+          agendamento: ""
         },
       });
 
@@ -125,6 +130,8 @@ app.post("/", express.json(), (req, res) => {
 
   intentMap.set("1) Informe os dados", menu);
   intentMap.set("2.1) Marcar horário", marcarHorario);
+  intentMap.set("2.2) Desmarcar Horário", desmarcarHorario);
+  intentMap.set("2.2.1) Desmarcar Horário - yes", confirmaDesmarcarHorario);
 
   agent.handleRequest(intentMap);
 });
