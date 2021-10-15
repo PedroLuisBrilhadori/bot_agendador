@@ -15,6 +15,10 @@ app.post("/", express.json(), (req, res) => {
     response: res,
   });
 
+  function init(agent){
+    agent.add("Digite 'menu' para voltar ao início da conversa, e 'oi' para um novo cadastro")
+  }
+
   function cadastrar(nome, telefone) {
     axios.post(sheets, {
       data: {
@@ -81,14 +85,17 @@ app.post("/", express.json(), (req, res) => {
               data: { agendamento: horarioAgendado },
             })    
             resposta = `Agendamento concluído! para: ${horarioAgendado}`;
+            
           }else{
             resposta = `Você já possui um agendamento para: ${respostaObject.agendamento}`;
+            
           }
       }
       catch {
         resposta = `erro objeto`;
       }
       agent.add(resposta);
+      init(agent);
     });
 
   }
@@ -107,6 +114,7 @@ app.post("/", express.json(), (req, res) => {
       }
 
       agent.add(resposta);
+
     });
   }
 
@@ -123,6 +131,7 @@ app.post("/", express.json(), (req, res) => {
       });
 
       agent.add("Consulta desmarcada com sucesso");
+      init(agent);
     });
   }
 
@@ -145,6 +154,7 @@ app.post("/", express.json(), (req, res) => {
        resposta = `erro objeto`;
       }
      agent.add(resposta);
+     init(agent);
    });
  }
   
