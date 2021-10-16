@@ -16,7 +16,7 @@ app.post("/", express.json(), (req, res) => {
   });
 
   function init(agent){
-    agent.add("Digite 'menu' para voltar ao início da conversa, e 'oi' para um novo cadastro")
+    agent.add("Digite 'menu' para voltar ao início da conversa.")
   }
 
   function cadastrar(nome, telefone) {
@@ -66,7 +66,7 @@ app.post("/", express.json(), (req, res) => {
     let hora = new Date(`${agent.parameters.hora}`);
     let data = new Date(`${agent.parameters.data}`);
 
-    data = `${data.getDate()}/${data.getMonth()}`;
+    data = `${data.getDate()}/${data.getMonth() + 1}`;
 
     if (hora.getMinutes() < 10) {
       hora = `${hora.getHours()}:0${hora.getMinutes()}`;
@@ -92,7 +92,7 @@ app.post("/", express.json(), (req, res) => {
           }
       }
       catch {
-        resposta = `erro objeto`;
+        resposta = `Oh! Tivemos um problema, por favor, digite 'oi' para reiniciar seu atendimento`;
       }
       agent.add(resposta);
       init(agent);
@@ -123,14 +123,14 @@ app.post("/", express.json(), (req, res) => {
     const link = `https://sheetdb.io/api/v1/at4lvf6xtu4tt/search?telefone=${telefone}`;
     const sheets = `https://sheetdb.io/api/v1/at4lvf6xtu4tt/telefone/${telefone}`;
     return axios.get(link).then((res) => {
-      const respostaObject = res.data[0];
       axios.patch(sheets, {
         data: {
           agendamento: ""
         },
       });
 
-      agent.add("Consulta desmarcada com sucesso");
+      proxMensagem = agent.consoleMessages[0].text;
+      agent.add(proxMensagem);
       init(agent);
     });
   }
@@ -151,7 +151,7 @@ app.post("/", express.json(), (req, res) => {
         }
       }
       catch{
-       resposta = `erro objeto`;
+       resposta = `Oh! Tivemos um problema, por favor, digite 'oi' para reiniciar seu atendimento`;
       }
      agent.add(resposta);
      init(agent);
