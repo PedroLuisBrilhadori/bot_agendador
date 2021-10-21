@@ -14,9 +14,7 @@ Ele passa informações sobre dias e horários disponiveis, e também consegue m
 
 ## Como rodar o back end 
 
-para executar é necessário um arquivo de configuração que está disponivel nas configurações do firebase. 
-
-é necessário instalar as bibliotecas externas para isso, digite em seu terminal: 
+- é necessário instalar as bibliotecas externas para isso, digite em seu terminal: 
 
 ```shell 
 npm install --save
