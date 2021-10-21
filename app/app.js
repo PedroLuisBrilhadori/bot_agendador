@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+
 const dialog = require("dialogflow-fulfillment");
 const axios = require("axios");
 const sheets = "https://sheetdb.io/api/v1/1au7vxesdoci5";
@@ -63,6 +64,7 @@ app.post("/", express.json(), (req, res) => {
     let telefone = agent.contexts[0].parameters.telefone;
     const link = `https://sheetdb.io/api/v1/1au7vxesdoci5/search?telefone=${telefone}`;
     const sheets = `https://sheetdb.io/api/v1/1au7vxesdoci5/telefone/${telefone}`;
+    
     let hora = new Date(`${agent.parameters.hora}`);
     let data = new Date(`${agent.parameters.data}`);
 
@@ -78,6 +80,7 @@ app.post("/", express.json(), (req, res) => {
     const horarioAgendado = `Data: ${data} às: ${hora} horas`;
 
     return axios.get(link).then((res) => {
+      
       const respostaObject = res.data[0];
       try{
         if (respostaObject.agendamento == "") {
@@ -101,9 +104,10 @@ app.post("/", express.json(), (req, res) => {
   }
 
   async function desmarcarHorario(agent) {
-     telefone = agent.contexts[1].parameters.telefone;
+    telefone = agent.contexts[1].parameters.telefone;
     const link = `https://sheetdb.io/api/v1/1au7vxesdoci5/search?telefone=${telefone}`;
     let resposta = "";
+    
     return axios.get(link).then((res) => {
       const respostaObject = res.data[0];
 
@@ -122,6 +126,7 @@ app.post("/", express.json(), (req, res) => {
     const telefone = agent.contexts[1].parameters.telefone;
     const link = `https://sheetdb.io/api/v1/1au7vxesdoci5/search?telefone=${telefone}`;
     const sheets = `https://sheetdb.io/api/v1/1au7vxesdoci5/telefone/${telefone}`;
+    
     return axios.get(link).then((res) => {
       axios.patch(sheets, {
         data: {
@@ -138,12 +143,12 @@ app.post("/", express.json(), (req, res) => {
 
   async function consultarHorario(agent) {
     telefone = agent.contexts[0].parameters.telefone;
-   const link = `https://sheetdb.io/api/v1/1au7vxesdoci5/search?telefone=${telefone}`;
-   let resposta = "";
-   return axios.get(link).then((res) => {
-     const respostaObject = res.data[0];
+    const link = `https://sheetdb.io/api/v1/1au7vxesdoci5/search?telefone=${telefone}`;
+    let resposta = "";
+    return axios.get(link).then((res) => {
+      const respostaObject = res.data[0];
 
-     try{
+      try{
         if (respostaObject.agendamento == "") {
         resposta = `Você não possui consultas agendadas`;
         }else {
@@ -153,8 +158,8 @@ app.post("/", express.json(), (req, res) => {
       catch{
        resposta = `Oh! Tivemos um problema, por favor, digite 'oi' para reiniciar seu atendimento`;
       }
-     agent.add(resposta);
-     init(agent);
+      agent.add(resposta);
+      init(agent);
    });
  }
   
@@ -172,5 +177,5 @@ app.post("/", express.json(), (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`sever started in port: ${port}`);
+  console.log(`O servidor está funcionando! Na porta: ${port}`);
 });
