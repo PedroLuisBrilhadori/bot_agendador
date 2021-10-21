@@ -35,10 +35,6 @@ app.post("/", express.json(), (req, res) => {
       let resposta = "";
       const nome = agent.parameters.nome;
       const telefone = agent.parameters.telefone;
-      usuarioAtual = {
-        nome: nome,
-        telefone: telefone,
-      };
       const link = `https://sheetdb.io/api/v1/1au7vxesdoci5/search?telefone=${telefone}`;
       return axios.get(link).then((res) => {
         const respostaObject = res.data[0];
