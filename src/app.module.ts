@@ -3,11 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClientesModule } from './clientes/clientes.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { DialogModule } from './dialog/dialog.module';
+const { linkDB } = require('../config.json')
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://pedrin:p3dr1nh0lb@cluster0.e0amz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'),
-    ClientesModule, 
+    MongooseModule.forRoot(linkDB),
+    ClientesModule,
+    DialogModule, 
   ],
   controllers: [AppController],
   providers: [AppService],
