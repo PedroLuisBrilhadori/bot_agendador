@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class DialogService {}
+export class DialogCadastroService {
+    
+}
